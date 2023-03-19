@@ -73,7 +73,8 @@ col1, col2, col3, col4 = st.columns(4)
 for i, (kpi_name, kpi_value) in enumerate(zip(kpi_names, kpis)):
     col = col1 if i % 4 == 0 else col2 if i % 4 == 1 else col3 if i % 4 == 2 else col4
     delta = round((kpi_value - kpis[i-1])/kpis[i-1]*100, 2) if i > 0 else 0
-    col.metric(label=kpi_name, value=round(kpi_value, 2), delta=f"{delta}%")
+    col.metric(label=kpi_name, value=round(kpi_value, 2))
+
 
 
 # Sales by product line over time

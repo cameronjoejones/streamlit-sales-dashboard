@@ -14,21 +14,21 @@ page_config = st.set_page_config(
 hide_menu_style = "<style> footer {visibility: hidden;} </style>"
 st.markdown(hide_menu_style, unsafe_allow_html=True)
 
-# Read the dataset
+
 @st.cache_data
 def load_data():
     data = pd.read_csv('input/sales_data_sample.csv', encoding='latin1')
     data['ORDERDATE'] = pd.to_datetime(data['ORDERDATE'])
     return data
 
+
 data = load_data()
 
-# Set the title and sidebar
-st.title("Sales Dashboard")
+
+st.title("📊 Sales Dashboard")
 st.sidebar.header("Filters")
 
 # Date range filter
-
 start_date = pd.Timestamp(st.sidebar.date_input("Start date", data['ORDERDATE'].min().date()))
 end_date = pd.Timestamp(st.sidebar.date_input("End date", data['ORDERDATE'].max().date()))
 filtered_data = data[(data['ORDERDATE'] >= start_date) & (data['ORDERDATE'] <= end_date)]
@@ -49,25 +49,19 @@ selected_statuses = st.sidebar.multiselect("Select Order Statuses", data['STATUS
 if selected_statuses:
     filtered_data = filtered_data[filtered_data['STATUS'].isin(selected_statuses)]
 
+st.sidebar.info('Created by Cameron [GitHub](https://github.com/cameronjoejones/streamlit-sales-dashboard)')
 
 # Calculate KPIs
 @st.cache_resource
 def calculate_kpis(data: pd.DataFrame) -> List[float]:
     total_sales = data['SALES'].sum()
+    sales_in_m = f"{total_sales/1000000:.2f}M"
     total_orders = data['ORDERNUMBER'].nunique()
-    average_sales_per_order = total_sales / total_orders
+    average_sales_per_order = f"{total_sales/total_orders/1000:.2f}K"
     unique_customers = data['CUSTOMERNAME'].nunique()
-    return [total_sales, total_orders, average_sales_per_order, unique_customers]
+    return [sales_in_m, total_orders, average_sales_per_order, unique_customers ]
 
 
-# Display KPI
-def display_kpi(kpi_name: str, kpi_value: float, index: int):
-    with st.container():
-        st.markdown(f"**{kpi_name}**")
-        st.markdown(f"<h1 style='text-align: center; color: {'#f63366' if index % 2 == 0 else '#008080'};'>{kpi_value:,.2f}</h1>", unsafe_allow_html=True)
-
-
-# Display KPI Metrics
 st.header("KPI Metrics")
 kpis = calculate_kpis(filtered_data)
 kpi_names = ["Total Sales", "Total Orders", "Average Sales per Order", "Unique Customers"]
@@ -75,16 +69,14 @@ kpi_names = ["Total Sales", "Total Orders", "Average Sales per Order", "Unique C
 col1, col2, col3, col4 = st.columns(4)
 for i, (kpi_name, kpi_value) in enumerate(zip(kpi_names, kpis)):
     col = col1 if i % 4 == 0 else col2 if i % 4 == 1 else col3 if i % 4 == 2 else col4
-    delta = round((kpi_value - kpis[i-1])/kpis[i-1]*100, 2) if i > 0 else 0
-    col.metric(label=kpi_name, value=round(kpi_value, 2))
+    # delta = round((kpi_value - kpis[i-1])/kpis[i-1]*100, 2) if i > 0 else 0
+    col.metric(label=kpi_name, value=kpi_value)
 
 
-
-# Sales by product line over time
-st.header("Sales by Product Line Over Time")
+# st.header("Sales by Product Line Over Time")
 sales_by_product_line_over_time = filtered_data.groupby(['ORDERDATE', 'PRODUCTLINE'])['SALES'].sum().reset_index()
 fig = px.area(sales_by_product_line_over_time, x='ORDERDATE', y='SALES', color='PRODUCTLINE', 
-              title="Sales by Product Line over Time", width=900, height=500)
+              title="Sales by Product Line Over Time", width=900, height=500)
 st.plotly_chart(fig)
 
 

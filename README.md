@@ -1,3 +1,5 @@
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://cameronjoejones-streamlit-sales-dashboard-app-3pmk71.streamlit.app/)
+
 # Sales Dashboard
 
 This is a Sales Dashboard built using Streamlit, a popular Python library for building interactive web applications. The dashboard allows you to filter and explore a sales dataset, and visualize key performance metrics, sales by product line over time, and top 10 customers, products, and total sales by product line.

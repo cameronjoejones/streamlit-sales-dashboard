@@ -11,6 +11,9 @@ page_config = st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+hide_menu_style = "<style> footer {visibility: hidden;} </style>"
+st.markdown(hide_menu_style, unsafe_allow_html=True)
+
 # Read the dataset
 @st.cache_data
 def load_data():

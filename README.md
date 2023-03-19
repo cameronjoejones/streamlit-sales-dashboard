@@ -1,4 +1,4 @@
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://cameronjoejones-streamlit-sales-dashboard-app-3pmk71.streamlit.app/)
+[![Open in Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B.svg?style=for-the-badge&logo=Streamlit&logoColor=white)](https://cameronjoejones-streamlit-sales-dashboard-app-3pmk71.streamlit.app/)
 
 # Sales Dashboard
 
